@@ -1,1 +1,29 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.divTitulo{
+    text-align: center;
+    margin-bottom: 2%;
+    background: #424242;
+    color: white;
+    padding-bottom: .5%;
+    padding-top: 1.5%;
+}
+.h1Titulo{
+    font-weight: bold;
+}
+
+h3{
+    margin: 16px 0 16px 0 !important;
+}
+
+.snackBarStyle {
+    background: #ec21f3;
+    color: white;
+}
+/*FONDO DEL SELECT*/
+.mat-select-panel .mat-option.mat-selected:not(.mat-option-multiple) {
+    background: rgb(253 253 253);
+    color: black;
+}

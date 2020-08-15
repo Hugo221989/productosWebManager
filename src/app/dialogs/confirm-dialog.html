@@ -1,0 +1,10 @@
+<div>
+        <h1 mat-dialog-title>{{ 'eliminar.usuario' | translate }}</h1>
+        <div mat-dialog-content>
+            <p>{{ 'deseas.eliminar.usuario' | translate }} {{data.name}}?</p>
+        </div>
+        <div mat-dialog-actions>
+            <button mat-button (click)="onNoClick()">{{ 'cancelar' | translate }}</button>
+            <button mat-button [mat-dialog-close]="'ok'" cdkFocusInitial>{{ 'eliminar' | translate }}</button>
+        </div>
+    </div>

@@ -1,0 +1,34 @@
+.divNavBar{
+    width: 100%;
+    display: inline-flex;
+    margin-left: 5%;
+}
+.navBarItemsContainer{
+    width: 76%;
+}
+.divNavBarItems{
+    width: 60%;
+    display: inline-flex;
+}
+
+.divNavBarItem{
+    width: 33%;
+    display: inline-flex;
+}
+.divNavBarExit{
+    width: 20%;
+    display: inline-flex;
+}
+.navBarExitItem{
+    width: 50%;
+}
+
+.contenedorBody{
+    padding: 3%;
+}
+.upperMenuText{
+    font-size: 16px;
+}
+:host ::ng-deep .mat-select-value-text{
+ font-size: 16px;
+}

@@ -1,0 +1,74 @@
+:host ::ng-deep .mat-form-field{
+    margin-right: 5%;
+}
+
+.button-row{
+    text-align: right;
+    margin-top: 5%;
+}
+.buttonCancel{
+    margin-right: 1%;
+    background: gray;
+}
+
+.divRadioGroup{
+    display: inline-block;
+    width: 20%;
+}
+
+.divRadioGroup .mat-radio-group{
+    margin-left: 2%;
+}
+
+.radio-button-left{
+    margin: 6%;
+}
+
+.input-compose{
+    width: 85%;
+}
+
+.textAreaBig{
+    width: 45%;
+}
+
+.textAreaLittle{
+    width: 20%;
+}
+
+.photoButtons{
+    text-align: center;
+}
+
+.imgProduct{
+    width: 100%;
+}
+
+.columns{
+    width: 24%;
+    border: 1px solid gray;
+    margin: 2px;
+    padding: 5px;
+}
+
+.divProgressBarPhoto{
+    text-align: center;
+    margin-bottom: 5%;
+}
+
+.progressBarPhoto{
+    width: 80%;
+    height: 3em;
+}
+
+.containerDivsPhotos{
+    display: inline-flex;
+}
+
+.divUploadButtons {
+    margin-top: 5%;
+}
+
+.selectFileInput{
+    width: 47%;
+}

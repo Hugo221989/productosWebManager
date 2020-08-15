@@ -1,0 +1,87 @@
+<div>
+    <div class="divTitulo">
+        <h1 class="h1Titulo">{{ 'clientes' | translate }}</h1>
+    </div>
+
+    <div class="mat-elevation-z8">
+        <mat-table
+        [dataSource]="dataSource"
+        matSort
+        class="tablaDetalle"
+        (matSortChange)="paginator.pageIndex = 0; busquedaOrden($event)"
+        id="tablaTarjetas"
+      >
+        <ng-container matColumnDef="nombre">
+          <mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="headerTarjetas bigWidth "
+          >
+            {{ 'nombre' | translate }}
+          </mat-header-cell>
+          <mat-cell
+            *matCellDef="let row"
+            class="tarjetasField letraMobileField bigWidth cellPanVisible"
+          >
+            {{ row.nombre | checkNull}}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="apellido">
+          <mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="headerTarjetas fAltaField bigWidth "
+          >
+            {{ 'apellido' | translate }}
+          </mat-header-cell>
+          <mat-cell
+            *matCellDef="let row"
+            class="tarjetasField letraMobileField fAltaField bigWidth"
+          >
+            {{ row.apellido | checkNull}}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="usuario">
+          <mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="headerTarjetas bigWidth headerTarjetasMobile"
+          >  
+          {{ 'usuario' | translate }}
+          </mat-header-cell>
+          <mat-cell
+            *matCellDef="let row"
+            class="tarjetasField letraMobileField bigWidth cellTarjetasMobile"
+          >
+            {{ row.usuario | checkNull}}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="acciones">
+          <mat-header-cell *matHeaderCellDef class="headerTarjetas smallWidth">
+          {{ 'acciones' | translate }}
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row" class="tarjetasField letraMobileField smallWidth">
+          <div class="iconTableActions">
+            <a class="actionIcon" (click)="openDialog(row)"><i class="material-icons iconoHover md-36">delete</i></a>
+            </div>
+            <div class="iconTableActions">
+              <a class="actionIcon" (click)="goToCustomerDetail(row)"><i class="material-icons iconoHover md-36">edit</i></a>
+            </div>
+          </mat-cell>
+        </ng-container>
+        <mat-header-row
+          *matHeaderRowDef="displayedColumns"
+        ></mat-header-row>
+        <mat-row
+          *matRowDef="let row; columns: displayedColumns"
+        ></mat-row>
+      </mat-table>
+      <div class="divNoRegistros" id="divNoRegistros"></div>
+      <mat-paginator
+        [pageSizeOptions]="pageSize"
+        #paginator
+        [length]="totalLength"
+        (page)="changePage($event)"
+      ></mat-paginator>
+      </div>
+</div>

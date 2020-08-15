@@ -1,0 +1,406 @@
+<div>
+    <mat-accordion>
+    <mat-expansion-panel >
+        <mat-expansion-panel-header>
+        <mat-panel-title>
+            <h3>{{ 'datos.principales.producto' | translate }}</h3>
+        </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-card>
+            <form [formGroup]="productForm">
+                <mat-form-field>
+                    <mat-label>{{ 'nombre' | translate }} *</mat-label>
+                    <input matInput placeholder="{{ 'nombre' | translate }}" formControlName="nombre">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>{{ 'nombreEng' | translate }} *</mat-label>
+                    <input matInput placeholder="{{ 'nombreEng' | translate }}" formControlName="nombreEng">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>{{ 'precio' | translate }} *</mat-label>
+                    <input matInput placeholder="{{ 'precio' | translate }}" formControlName="precio" class="input-compose"
+                    numeric decimals="2" type="text"><span matSuffix> €</span> 
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>{{ 'tamano' | translate }} *</mat-label>
+                    <input matInput placeholder="{{ 'tamano' | translate }}" formControlName="tamano" class="input-compose"> gr.
+                </mat-form-field>
+            <!--  <mat-form-field>
+                    <mat-label>{{ 'genero' | translate }} *</mat-label>
+                    <mat-select formControlName="gender" [compareWith]="compareFn">
+                    <mat-option *ngFor="let gender of genders" [value] = "gender">
+                        {{gender.nombre}}
+                    </mat-option>
+                    </mat-select>
+                </mat-form-field> -->
+                <div class="divRadioGroup">
+                    <mat-label>{{ 'puntuacion' | translate }}</mat-label>
+                    <mat-slider
+                    formControlName="puntuacion"
+                    (change)="onRatingChange($event)"
+                        thumbLabel
+                        tickInterval="1000"
+                        min="1"
+                        max="5"></mat-slider>
+                        {{inputPuntuacion}} <!-- <mat-icon aria-hidden="false" aria-label="Example home icon">star_rate</mat-icon> -->
+                </div>
+                <div class="divRadioGroup">
+                    <mat-label>{{ 'disponible' | translate }} *</mat-label>
+                    <mat-radio-group aria-label="Select an option" formControlName="disponible">
+                        <mat-radio-button value="true" [checked]="productForm.value.disponible == true" class="radio-button-left">{{ 'si' | translate }}</mat-radio-button>
+                        <mat-radio-button value="false" [checked]="productForm.value.disponible == false">{{ 'no' | translate }}</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+                <mat-form-field>
+                    <mat-label>{{ 'precioFinal' | translate }}</mat-label>
+                    <input matInput placeholder="{{ 'precioFinal' | translate }}" formControlName="precioFinal" class="input-compose"
+                    numeric decimals="2"> €
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>{{ 'descuento' | translate }}</mat-label>
+                    <input matInput placeholder="{{ 'descuento' | translate }}" formControlName="descuento" class="input-compose"
+                    numeric decimals="2"> €
+                </mat-form-field>
+
+                <p></p>
+                <h3>{{ 'categorias' | translate }}</h3>
+                <mat-form-field>
+                    <mat-label>{{ 'categoria.padre' | translate }} *</mat-label>
+                    <mat-select formControlName="categoriaPadre" (selectionChange)="fillCategoriaLinkedUrl($event.value)">
+                        <mat-option *ngFor="let catPadre of categoriasPadre" [value] = "catPadre.id">
+                        {{catPadre.nombre}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>{{ 'categoria' | translate }} *</mat-label>
+                    <mat-select formControlName="categoria" (selectionChange)="fillSubCategoriaLinkedUrl($event.value)">
+                        <mat-option *ngFor="let cat of categorias" [value] = "cat.id">
+                        {{cat.nombre}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>{{ 'subcategoria' | translate }} *</mat-label>
+                    <mat-select formControlName="subCategoria">
+                        <mat-option *ngFor="let subCat of subCategorias" [value] = "subCat.id">
+                        {{subCat.nombre}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <div class="button-row">
+                    <button mat-flat-button class="buttonCancel" routerLink="/products/list">{{ 'cancelar' | translate }}</button>
+                    <button mat-flat-button color="primary" (click)="updateProductMainData()"  [disabled]="!productForm.valid">{{ 'guardar' | translate }}</button>
+                </div>
+            </form>
+        </mat-card>
+    </mat-expansion-panel>
+
+    <!--VALOR NUTRICIONAL-->
+    <mat-expansion-panel >
+        <mat-expansion-panel-header>
+        <mat-panel-title>
+            <h3>{{ 'valor.nutricional.producto' | translate }}</h3>
+        </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-card>
+            <form [formGroup]="valorNutricionalForm">
+                <mat-form-field>
+                    <mat-label>{{ 'dosis' | translate }} *</mat-label>
+                    <input matInput placeholder="{{ 'dosis' | translate }}" formControlName="dosis" type="number">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>{{ 'dosis.envase' | translate }} *</mat-label>
+                    <input matInput placeholder="{{ 'dosis.envase' | translate }}" formControlName="dosisEnvase" type="number">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>{{ 'dosis.diaria' | translate }} *</mat-label>
+                    <input matInput placeholder="{{ 'dosis.diaria' | translate }}" formControlName="dosisDiaria" type="number">
+                </mat-form-field>
+                <p></p>
+                <mat-form-field class="textAreaBig">
+                    <mat-label>{{ 'ingredientes' | translate }} *</mat-label>
+                    <textarea matInput placeholder="{{ 'ingredientes' | translate }}" formControlName="ingredientes"
+                    rows="7"></textarea>
+                </mat-form-field>
+                <mat-form-field class="textAreaBig">
+                    <mat-label>{{ 'ingredientesEng' | translate }} *</mat-label>
+                    <textarea matInput placeholder="{{ 'ingredientesEng' | translate }}" formControlName="ingredientesEng"
+                    rows="7"></textarea>
+                </mat-form-field>
+                <mat-form-field class="textAreaBig">
+                    <mat-label>{{ 'otros.ingredientes' | translate }} *</mat-label>
+                    <textarea matInput placeholder="{{ 'otros.ingredientes' | translate }}" formControlName="otrosIngredientes"
+                    rows="7"></textarea>
+                </mat-form-field>
+                <mat-form-field class="textAreaBig">
+                    <mat-label>{{ 'otros.ingredientesEng' | translate }} *</mat-label>
+                    <textarea matInput placeholder="{{ 'otros.ingredientesEng' | translate }}" formControlName="otrosIngredientesEng"
+                    rows="7"></textarea>
+                </mat-form-field>
+                <mat-form-field class="textAreaBig">
+                    <mat-label>{{ 'conservacion' | translate }} *</mat-label>
+                    <textarea matInput placeholder="{{ 'conservacion' | translate }}" formControlName="conservacion"
+                    rows="5"></textarea>
+                </mat-form-field>
+                <mat-form-field class="textAreaBig">
+                    <mat-label>{{ 'conservacionEng' | translate }} *</mat-label>
+                    <textarea matInput placeholder="{{ 'conservacionEng' | translate }}" formControlName="conservacionEng"
+                    rows="5"></textarea>
+                </mat-form-field>
+                <mat-form-field class="textAreaBig">
+                    <mat-label>{{ 'alergias' | translate }} *</mat-label>
+                    <textarea matInput placeholder="{{ 'alergias' | translate }}" formControlName="alergias"
+                    rows="5"></textarea>
+                </mat-form-field>
+                <mat-form-field class="textAreaBig">
+                    <mat-label>{{ 'alergiasEng' | translate }} *</mat-label>
+                    <textarea matInput placeholder="{{ 'alergiasEng' | translate }}" formControlName="alergiasEng"
+                    rows="5"></textarea>
+                </mat-form-field>
+                <mat-form-field class="textAreaBig">
+                    <mat-label>{{ 'modo.empleo' | translate }} *</mat-label>
+                    <textarea matInput placeholder="{{ 'modo.empleo' | translate }}" formControlName="modoEmpleo"
+                    rows="5"></textarea>
+                </mat-form-field>
+                <mat-form-field class="textAreaBig">
+                    <mat-label>{{ 'modo.empleoEng' | translate }} *</mat-label>
+                    <textarea matInput placeholder="{{ 'modo.empleoEng' | translate }}" formControlName="modoEmpleoEng"
+                    rows="5"></textarea>
+                </mat-form-field>
+                <mat-form-field class="textAreaBig">
+                    <mat-label>{{ 'advertencias' | translate }} *</mat-label>
+                    <textarea matInput placeholder="{{ 'advertencias' | translate }}" formControlName="advertencias"
+                    rows="5"></textarea>
+                </mat-form-field>
+                <mat-form-field class="textAreaBig">
+                    <mat-label>{{ 'advertenciasEng' | translate }} *</mat-label>
+                    <textarea matInput placeholder="{{ 'advertenciasEng' | translate }}" formControlName="advertenciasEng"
+                    rows="5"></textarea>
+                </mat-form-field>
+                <div class="button-row">
+                    <button mat-flat-button class="buttonCancel" routerLink="/products/list">{{ 'cancelar' | translate }}</button>
+                    <button mat-flat-button color="primary" (click)="updateProductoNutritionalValue()"  [disabled]="!valorNutricionalForm.valid">{{ 'guardar' | translate }}</button>
+                </div>
+            </form>
+        </mat-card>
+    </mat-expansion-panel>
+
+    <!--INFO BÁSICA-->
+    <mat-expansion-panel >
+        <mat-expansion-panel-header>
+        <mat-panel-title>
+            <h3>{{ 'info.basica.producto' | translate }}</h3>
+        </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-card>
+            <form [formGroup]="infoBasicaForm">
+                <mat-form-field>
+                    <mat-label>{{ 'valor.energetico' | translate }} *</mat-label>
+                    <input matInput placeholder="{{ 'valor.energetico' | translate }}" formControlName="valorEnergetico" class="input-compose" type="number"><span matSuffix> kcal</span> 
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>{{ 'proteinas' | translate }} *</mat-label>
+                    <input matInput placeholder="{{ 'proteinas' | translate }}" formControlName="proteinas" class="input-compose" type="number"><span matSuffix> gr</span> 
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>{{ 'hidratos' | translate }} *</mat-label>
+                    <input matInput placeholder="{{ 'hidratos' | translate }}" formControlName="hidratos" class="input-compose" type="number"><span matSuffix> gr</span> 
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>{{ 'azucares' | translate }} *</mat-label>
+                    <input matInput placeholder="{{ 'azucares' | translate }}" formControlName="azucares" class="input-compose" type="number"><span matSuffix> gr</span> 
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>{{ 'grasas' | translate }} *</mat-label>
+                    <input matInput placeholder="{{ 'grasas' | translate }}" formControlName="grasas" class="input-compose" type="number"><span matSuffix> gr</span> 
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>{{ 'saturadas' | translate }} *</mat-label>
+                    <input matInput placeholder="{{ 'saturadas' | translate }}" formControlName="saturadas" class="input-compose" type="number"><span matSuffix> gr</span> 
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>{{ 'sodio' | translate }} *</mat-label>
+                    <input matInput placeholder="{{ 'sodio' | translate }}" formControlName="sodio" class="input-compose" type="number"><span matSuffix> gr</span> 
+                </mat-form-field>
+                <div class="button-row">
+                    <button mat-flat-button class="buttonCancel" routerLink="/products/list">{{ 'cancelar' | translate }}</button>
+                    <button mat-flat-button color="primary" (click)="updateProductoInfoBasica()"  [disabled]="!infoBasicaForm.valid">{{ 'guardar' | translate }}</button>
+                </div>
+            </form>
+        </mat-card>
+    </mat-expansion-panel>
+
+    <!--DESCRIPCION-->
+    <mat-expansion-panel >
+        <mat-expansion-panel-header>
+        <mat-panel-title>
+            <h3>{{ 'descripcion.producto' | translate }}</h3>
+        </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-card>
+            <form [formGroup]="descripcionForm">
+                <mat-form-field class="textAreaLittle">
+                    <mat-label>{{ 'titulo' | translate }} *</mat-label>
+                    <textarea matInput placeholder="{{ 'titulo' | translate }}" formControlName="titulo"></textarea>
+                </mat-form-field>
+                <mat-form-field class="textAreaLittle">
+                    <mat-label>{{ 'tituloEng' | translate }} *</mat-label>
+                    <textarea matInput placeholder="{{ 'tituloEng' | translate }}" formControlName="tituloEng"></textarea>
+                </mat-form-field>
+                <mat-form-field class="textAreaLittle">
+                    <mat-label>{{ 'subtitulo' | translate }} *</mat-label>
+                    <textarea matInput placeholder="{{ 'subtitulo' | translate }}" formControlName="subtitulo"></textarea>
+                </mat-form-field>
+                <mat-form-field class="textAreaLittle">
+                    <mat-label>{{ 'subtituloEng' | translate }} *</mat-label>
+                    <textarea matInput placeholder="{{ 'subtituloEng' | translate }}" formControlName="subtituloEng"></textarea>
+                </mat-form-field>
+                <p></p>
+                <mat-form-field class="textAreaBig">
+                    <mat-label>{{ 'apartado' | translate }} *</mat-label>
+                    <textarea matInput placeholder="{{ 'apartado' | translate }}" formControlName="apartado"
+                    rows="5"></textarea>
+                </mat-form-field>
+                <mat-form-field class="textAreaBig">
+                    <mat-label>{{ 'apartadoEng' | translate }} *</mat-label>
+                    <textarea matInput placeholder="{{ 'apartadoEng' | translate }}" formControlName="apartadoEng"
+                    rows="5"></textarea>
+                </mat-form-field>
+                <mat-form-field class="textAreaBig">
+                    <mat-label>{{ 'caracteristicas' | translate }} *</mat-label>
+                    <textarea matInput placeholder="{{ 'caracteristicas' | translate }}" formControlName="caracteristicas"
+                    rows="7"></textarea>
+                </mat-form-field>
+                <mat-form-field class="textAreaBig">
+                    <mat-label>{{ 'caracteristicasEng' | translate }} *</mat-label>
+                    <textarea matInput placeholder="{{ 'caracteristicasEng' | translate }}" formControlName="caracteristicasEng"
+                    rows="7"></textarea>
+                </mat-form-field>
+                <mat-form-field class="textAreaBig">
+                    <mat-label>{{ 'beneficios' | translate }} *</mat-label>
+                    <textarea matInput placeholder="{{ 'beneficios' | translate }}" formControlName="beneficios"
+                    rows="5"></textarea>
+                </mat-form-field>
+                <mat-form-field class="textAreaBig">
+                    <mat-label>{{ 'beneficiosEng' | translate }} *</mat-label>
+                    <textarea matInput placeholder="{{ 'beneficiosEng' | translate }}" formControlName="beneficiosEng"
+                    rows="5"></textarea>
+                </mat-form-field>
+                <div class="button-row">
+                    <button mat-flat-button class="buttonCancel" routerLink="/products/list">{{ 'cancelar' | translate }}</button>
+                    <button mat-flat-button color="primary" (click)="updateProductoDescripcion()"  [disabled]="!descripcionForm.valid">{{ 'guardar' | translate }}</button>
+                </div>
+            </form>
+        </mat-card>
+    </mat-expansion-panel>
+
+        <!--FOTOS-->
+        <mat-expansion-panel >
+            <mat-expansion-panel-header>
+            <mat-panel-title>
+                <h3>{{ 'fotos.producto' | translate }}</h3>
+            </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-card>
+                <div class="field" *ngIf="!infoMessage">
+                    <div class="control divProgressBarPhoto">
+                      <progress class="progress is-primary progressBarPhoto" [attr.value]="progress" max="100" ></progress>
+                    </div>
+                  </div>
+                  <div class="containerDivsPhotos">
+                      <div class="columns" *ngIf="productPhotoOne">
+                            <div class="column">
+                                <figure class="image is-128x128"><img [src]="photoUrlOne" class="imgProduct"/></figure>
+                            </div>
+                            <div class="column is-one-third photoButtons"> 
+                            <div class="field">
+                                <div class="file has-name is-primary is-fullwidth">
+                                <label class="file-label">
+                                    <input class="file-input selectFileInput" type="file" name="file" #fileInput  (change)="onPhotoOneChange(fileInput.files[0])"/>
+                                    <span class="file-name"> {{ productPhotoOne.ruta }} </span>
+                                </label>
+                                </div>
+                            </div>
+                            <div class="divUploadButtons">
+                                <div class="control">
+                                    <button mat-flat-button class="buttonCancel" (click)="cancelPhotoOneChange()">{{ 'cancelar' | translate }}</button>
+                                    <button  mat-flat-button color="primary" (click)="onPhotoUploadOne(productPhotoOne.ruta)" [disabled]="isUploading ? '' : null" >{{ 'subir.foto' | translate }}</button>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+
+                        <div class="columns" *ngIf="productPhotoTwo">
+                            <div class="column">
+                                <figure class="image is-128x128"><img [src]="photoUrlTwo" class="imgProduct" /></figure>
+                            </div>
+                            <div class="column is-one-third photoButtons"> 
+                            <div class="field">
+                                <div class="file has-name is-primary is-fullwidth">
+                                <label class="file-label">
+                                    <input class="file-input selectFileInput" type="file" name="file" #fileInput  (change)="onPhotoTwoChange(fileInput.files[0])"/>
+                                    <span class="file-name"> {{ productPhotoTwo.ruta }} </span>
+                                </label>
+                                </div>
+                            </div>
+                            <div class="divUploadButtons">
+                                <div class="control">
+                                    <button mat-flat-button class="buttonCancel" (click)="cancelPhotoTwoChange()">{{ 'cancelar' | translate }}</button>
+                                    <button  mat-flat-button color="primary" (click)="onPhotoUploadTwo(productPhotoTwo.ruta)" [disabled]="isUploading ? '' : null" >{{ 'subir.foto' | translate }}</button>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+
+                        <div class="columns" *ngIf="productPhotoThree">
+                            <div class="column">
+                                <figure class="image is-128x128"><img [src]="photoUrlThree" class="imgProduct" /></figure>
+                            </div>
+                            <div class="column is-one-third photoButtons"> 
+                            <div class="field">
+                                <div class="file has-name is-primary is-fullwidth">
+                                <label class="file-label">
+                                    <input class="file-input selectFileInput" type="file" name="file" #fileInput  (change)="onPhotoThreeChange(fileInput.files[0])"/>
+                                    <span class="file-name"> {{ productPhotoThree.ruta }} </span>
+                                </label>
+                                </div>
+                            </div>
+                            <div class="divUploadButtons">
+                                <div class="control">
+                                    <button mat-flat-button class="buttonCancel" (click)="cancelPhotoThreeChange()">{{ 'cancelar' | translate }}</button>
+                                    <button  mat-flat-button color="primary" (click)="onPhotoUploadThree(productPhotoThree.ruta)" [disabled]="isUploading ? '' : null" >{{ 'subir.foto' | translate }}</button>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+
+                        <div class="columns" *ngIf="productPhotoFour">
+                            <div class="column">
+                                <figure class="image is-128x128"><img [src]="photoUrlFour" class="imgProduct" /></figure>
+                            </div>
+                            <div class="column is-one-third photoButtons"> 
+                            <div class="field">
+                                <div class="file has-name is-primary is-fullwidth"> 
+                                <label class="file-label">
+                                    <input class="file-input selectFileInput" type="file" name="file" #fileInput  (change)="onPhotoFourChange(fileInput.files[0])"/>
+                                    <span class="file-name"> {{ productPhotoFour.ruta }} </span>
+                                </label>
+                                </div>
+                            </div>
+                            <div class="divUploadButtons">
+                                <div class="control">
+                                    <button mat-flat-button class="buttonCancel" (click)="cancelPhotoFourChange()">{{ 'cancelar' | translate }}</button>
+                                    <button  mat-flat-button color="primary" (click)="onPhotoUploadFour(productPhotoFour.ruta)" [disabled]="isUploading ? '' : null" >{{ 'subir.foto' | translate }}</button>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+            </mat-card>
+        </mat-expansion-panel>
+
+</mat-accordion>
+    
+</div>
