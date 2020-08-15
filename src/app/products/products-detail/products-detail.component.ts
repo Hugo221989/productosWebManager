@@ -83,77 +83,22 @@ export class ProductsDetailComponent implements OnInit {
 
   initProductForm(){
     this.productForm = Utils.initProductForm(this.fb);
-   /*  this.productForm = this.fb.group({
-      'nombre': new FormControl(''),
-      'nombreEng': new FormControl(''),
-      'precio': new FormControl('', [Validators.required, Validators.pattern(/\-?\d*\.?\d{1,2}/)]),
-      'tamano': new FormControl(new Date()),
-      'saborSeleccionado': new FormControl('', Validators.required),
-      'cantidad': new FormControl(''),
-      'puntuacion': new FormControl(''),
-      'disponible': new FormControl(''),
-      //'foto': new FormControl(''),
-      'precioFinal': new FormControl(''),
-      'descuento': new FormControl(''),
-      'categoriaPadre': new FormControl('', Validators.required),
-      'categoria': new FormControl('', Validators.required),
-      'subCategoria': new FormControl('', Validators.required),
-    }); */
   }
 
   initValorNutricionalForm(){
-    this.valorNutricionalForm = this.fb.group({
-      'dosis': new FormControl(''),
-      'dosisEnvase': new FormControl(''),
-      'dosisDiaria': new FormControl(''),
-      'ingredientes': new FormControl(''),
-      'ingredientesEng': new FormControl(''),
-      'otrosIngredientes': new FormControl(''),
-      'otrosIngredientesEng': new FormControl(''),
-      'conservacion': new FormControl(''),
-      'conservacionEng': new FormControl(''),
-      'alergias': new FormControl(''),
-      'alergiasEng': new FormControl(''),
-      'modoEmpleo': new FormControl(''),
-      'modoEmpleoEng': new FormControl(''),
-      'advertencias': new FormControl(''),
-      'advertenciasEng': new FormControl('')
-    })
+    this.valorNutricionalForm = Utils.initValorNutricionalForm(this.fb);
   }
 
   initInfoBasicaForm(){
-    this.infoBasicaForm = this.fb.group({
-      'valorEnergetico': new FormControl(''),
-      'proteinas': new FormControl(''),
-      'hidratos': new FormControl(''),
-      'azucares': new FormControl(''),
-      'grasas': new FormControl(''),
-      'saturadas': new FormControl(''),
-      'sodio': new FormControl('')
-    })
+    this.infoBasicaForm = Utils.initInfoBasicaForm(this.fb);
   }
 
   initDescripcionForm(){
-    this.descripcionForm = this.fb.group({
-      'titulo': new FormControl(''),
-      'tituloEng': new FormControl(''),
-      'subtitulo': new FormControl(''),
-      'subtituloEng': new FormControl(''),
-      'apartado': new FormControl(''),
-      'apartadoEng': new FormControl(''),
-      'caracteristicas': new FormControl(''),
-      'caracteristicasEng': new FormControl(''),
-      'beneficios': new FormControl(''),
-      'beneficiosEng': new FormControl('')
-    })
+    this.descripcionForm = Utils.initDescripcionForm(this.fb);
   }
 
   initInfoVitaminasForm(){
-    this.infoVitaminasForm = this.fb.group({
-      'nombre': new FormControl(''),
-      'nombreEng': new FormControl(''),
-      'valor': new FormControl('')
-    })
+    this.infoVitaminasForm = Utils.initInfoVitaminasForm(this.fb);
   }
 
   getUrlParams(){
@@ -199,20 +144,8 @@ export class ProductsDetailComponent implements OnInit {
   fillProductFormData(){
     if(this.product){
       this.producto = this.product.producto;
-      this.productForm.controls['nombre'].setValue(this.producto.nombre);
-      this.productForm.controls['nombreEng'].setValue(this.producto.nombreEng);
-      this.productForm.controls['precio'].setValue(this.producto.precio);
-      this.productForm.controls['tamano'].setValue(this.producto.tamano);
-      this.productForm.controls['saborSeleccionado'].setValue(this.producto.saborSeleccionado);
-      this.productForm.controls['cantidad'].setValue(this.producto.cantidad);
+      this.productForm = Utils.fillProductFormData(this.productForm, this.product);
       this.inputPuntuacion = this.producto.puntuacion;
-      this.productForm.controls['puntuacion'].setValue(this.producto.puntuacion);
-      this.productForm.controls['disponible'].setValue(this.producto.disponible);
-      this.productForm.controls['precioFinal'].setValue(this.producto.precioFinal);
-      this.productForm.controls['descuento'].setValue(this.producto.descuento);
-      this.productForm.controls['categoriaPadre'].setValue(this.product.categoriaPadre);
-      this.productForm.controls['categoria'].setValue(this.product.categoria);
-      this.productForm.controls['subCategoria'].setValue(this.product.subCategoria);
       this.fillValorNutricionalForm(this.producto);
       this.fillDescripcionForm(this.producto);
     }
@@ -221,21 +154,7 @@ export class ProductsDetailComponent implements OnInit {
   fillValorNutricionalForm(producto: Producto){
     if(producto.valorNutricional.infoBasica){
       let valorNutricional: ValorNutricional = producto.valorNutricional;
-      this.valorNutricionalForm.controls['dosis'].setValue(valorNutricional.dosis);
-      this.valorNutricionalForm.controls['dosisEnvase'].setValue(valorNutricional.dosisEnvase);
-      this.valorNutricionalForm.controls['dosisDiaria'].setValue(valorNutricional.dosisDiaria);
-      this.valorNutricionalForm.controls['ingredientes'].setValue(valorNutricional.ingredientes);
-      this.valorNutricionalForm.controls['ingredientesEng'].setValue(valorNutricional.ingredientesEng);
-      this.valorNutricionalForm.controls['otrosIngredientes'].setValue(valorNutricional.otrosIngredientes);
-      this.valorNutricionalForm.controls['otrosIngredientesEng'].setValue(valorNutricional.otrosIngredientesEng);
-      this.valorNutricionalForm.controls['conservacion'].setValue(valorNutricional.conservacion);
-      this.valorNutricionalForm.controls['conservacionEng'].setValue(valorNutricional.conservacionEng);
-      this.valorNutricionalForm.controls['alergias'].setValue(valorNutricional.alergias);
-      this.valorNutricionalForm.controls['alergiasEng'].setValue(valorNutricional.alergiasEng);
-      this.valorNutricionalForm.controls['advertencias'].setValue(valorNutricional.advertencias);
-      this.valorNutricionalForm.controls['advertenciasEng'].setValue(valorNutricional.advertenciasEng);
-      this.valorNutricionalForm.controls['modoEmpleo'].setValue(valorNutricional.modoEmpleo);
-      this.valorNutricionalForm.controls['modoEmpleoEng'].setValue(valorNutricional.modoEmpleoEng);
+      this.valorNutricionalForm = Utils.fillValorNutricionalForm(this.valorNutricionalForm, valorNutricional);
       this.fillInfoBasicaForm(valorNutricional);
     }
   }
@@ -243,29 +162,14 @@ export class ProductsDetailComponent implements OnInit {
   fillInfoBasicaForm(valorNutricional: ValorNutricional){
     if(valorNutricional.infoBasica){
       let infoBasica: InfoBasica = valorNutricional.infoBasica;
-      this.infoBasicaForm.controls['valorEnergetico'].setValue(infoBasica.valorEnergetico);
-      this.infoBasicaForm.controls['proteinas'].setValue(infoBasica.proteinas);
-      this.infoBasicaForm.controls['hidratos'].setValue(infoBasica.hidratos);
-      this.infoBasicaForm.controls['azucares'].setValue(infoBasica.azucares);
-      this.infoBasicaForm.controls['grasas'].setValue(infoBasica.grasas);
-      this.infoBasicaForm.controls['saturadas'].setValue(infoBasica.saturadas);
-      this.infoBasicaForm.controls['sodio'].setValue(infoBasica.sodio);
+      this.infoBasicaForm = Utils.fillInfoBasicaForm(this.infoBasicaForm, infoBasica);
     }
   }
 
   fillDescripcionForm(producto: Producto){
     if(producto.descripcion){
       let descripcion: Descripcion = producto.descripcion;
-      this.descripcionForm.controls['titulo'].setValue(descripcion.titulo);
-      this.descripcionForm.controls['tituloEng'].setValue(descripcion.tituloEng);
-      this.descripcionForm.controls['subtitulo'].setValue(descripcion.subtitulo);
-      this.descripcionForm.controls['subtituloEng'].setValue(descripcion.subtituloEng);
-      this.descripcionForm.controls['apartado'].setValue(descripcion.apartado);
-      this.descripcionForm.controls['apartadoEng'].setValue(descripcion.apartadoEng);
-      this.descripcionForm.controls['caracteristicas'].setValue(descripcion.caracteristicas);
-      this.descripcionForm.controls['caracteristicasEng'].setValue(descripcion.caracteristicasEng);
-      this.descripcionForm.controls['beneficios'].setValue(descripcion.beneficios);
-      this.descripcionForm.controls['beneficiosEng'].setValue(descripcion.beneficiosEng);
+      this.descripcionForm = Utils.fillDescripcionForm(this.descripcionForm, descripcion);
     }
   }
 
@@ -297,79 +201,39 @@ export class ProductsDetailComponent implements OnInit {
   }
 
   updateProductMainData(){
-    let producto: Producto = this.producto;
-    producto.nombre = this.productForm.value.nombre;
-    producto.nombreEng = this.productForm.value.nombreEng;
-    producto.precio = this.productForm.value.precio;
-    producto.tamano = this.productForm.value.tamano;
-    producto.puntuacion = this.productForm.value.puntuacion;
-    producto.disponible = this.productForm.value.disponible;
-    producto.precioFinal = this.productForm.value.precioFinal;
-    producto.descuento = this.productForm.value.descuento;
-    this.product.categoriaPadre = this.productForm.value.categoriaPadre;
-    this.product.categoria = this.productForm.value.categoria;
-    this.product.subCategoria = this.productForm.value.subCategoria;
-    this.product.producto = this.producto;
+    this.product = Utils.updateProductMainData(this.product, this.productForm);
     this.updateProducto();
   }
 
   updateProductoInfoBasica(){
-    let infoBasica: InfoBasica = this.producto.valorNutricional.infoBasica;
-    infoBasica.valorEnergetico = this.infoBasicaForm.value.valorEnergetico;
-    infoBasica.proteinas = this.infoBasicaForm.value.proteinas;
-    infoBasica.hidratos = this.infoBasicaForm.value.hidratos;
-    infoBasica.azucares = this.infoBasicaForm.value.azucares;
-    infoBasica.grasas = this.infoBasicaForm.value.grasas;
-    infoBasica.saturadas = this.infoBasicaForm.value.saturadas;
-    infoBasica.sodio = this.infoBasicaForm.value.sodio;
-    this.producto.valorNutricional.infoBasica = infoBasica;
+    this.producto = Utils.updateProductoInfoBasica(this.producto, this.infoBasicaForm);
     this.product.producto = this.producto;
     this.updateProducto();
   }
 
   updateProductoDescripcion(){
-    let descripcion: Descripcion = this.producto.descripcion;
-    descripcion.titulo = this.descripcionForm.value.titulo;
-    descripcion.tituloEng = this.descripcionForm.value.tituloEng;
-    descripcion.subtitulo = this.descripcionForm.value.subtitulo;
-    descripcion.subtituloEng = this.descripcionForm.value.subtituloEng;
-    descripcion.apartado = this.descripcionForm.value.apartado;
-    descripcion.apartadoEng = this.descripcionForm.value.apartadoEng;
-    descripcion.caracteristicas = this.descripcionForm.value.caracteristicas;
-    descripcion.caracteristicasEng = this.descripcionForm.value.caracteristicasEng;
-    descripcion.beneficios = this.descripcionForm.value.beneficios;
-    descripcion.beneficiosEng = this.descripcionForm.value.beneficiosEng;
-    this.producto.descripcion = descripcion;
+    this.producto = Utils.updateProductoDescripcion(this.producto, this.descripcionForm);
     this.product.producto = this.producto;
     this.updateProducto();
   }
 
   updateProductoNutritionalValue(){
-    let valorNutricional: ValorNutricional = this.product.producto.valorNutricional;
-    valorNutricional.dosis = this.valorNutricionalForm.value.dosis;
-    valorNutricional.dosisEnvase = this.valorNutricionalForm.value.dosisEnvase;
-    valorNutricional.dosisDiaria = this.valorNutricionalForm.value.dosisDiaria;
-    valorNutricional.ingredientes = this.valorNutricionalForm.value.ingredientes;
-    valorNutricional.ingredientesEng = this.valorNutricionalForm.value.ingredientesEng;
-    valorNutricional.otrosIngredientes = this.valorNutricionalForm.value.otrosIngredientes;
-    valorNutricional.otrosIngredientesEng = this.valorNutricionalForm.value.otrosIngredientesEng;
-    valorNutricional.conservacion = this.valorNutricionalForm.value.conservacion;
-    valorNutricional.conservacionEng = this.valorNutricionalForm.value.conservacionEng;
-    valorNutricional.alergias = this.valorNutricionalForm.value.alergias;
-    valorNutricional.alergiasEng = this.valorNutricionalForm.value.alergiasEng;
-    valorNutricional.modoEmpleo = this.valorNutricionalForm.value.modoEmpleo;
-    valorNutricional.modoEmpleoEng = this.valorNutricionalForm.value.modoEmpleoEng;
-    valorNutricional.advertencias = this.valorNutricionalForm.value.advertencias;
-    valorNutricional.advertenciasEng = this.valorNutricionalForm.value.advertenciasEng;
-    this.product.producto.valorNutricional = valorNutricional;
+    this.product.producto = Utils.updateProductoNutritionalValue(this.product.producto, this.valorNutricionalForm);
     this.updateProducto();
   }
 
   updateProducto(){
-    this.productService.updateProductoData(this.updateProductoUrl, this.product).subscribe( data=> {
-      
+    this.productService.updateProductoData(this.updateProductoUrl, this.product).subscribe( data=> { 
+      this.openMessageAfterUpdate('Datos actualizados correctamente', '');
     },error => {
       this.openMessageAfterUpdate('Error al guardar los datos', error.error);
+    });
+  }
+
+  openMessageAfterUpdate(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 4000,
+      panelClass: ['snackBarStyle']
     });
   }
 
@@ -474,6 +338,9 @@ export class ProductsDetailComponent implements OnInit {
     this.uploader.upload(urlUploadPhoto, this.photo).subscribe(message => {
       this.isUploading = false;
       this.infoMessage = message;
+      this.openMessageAfterUpdate('Foto subida correctamente', '');
+    },error => {
+      this.openMessageAfterUpdate('Error al guardar los datos', error.error);
     });
   }
 
@@ -535,21 +402,6 @@ export class ProductsDetailComponent implements OnInit {
 
   onRatingChange(slider){
     this.inputPuntuacion = slider.value;
-  }
-
-  createDateFromString(dateString: string){
-    const dateArray = dateString.split("/");
-    const year = dateArray[2];
-    const month = dateArray[1];
-    const day = dateArray[0];
-    return new Date(year+'-'+month+'-'+day);
-  }
-
-  openMessageAfterUpdate(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: 4000,
-      panelClass: ['snackBarStyle']
-    });
   }
 
   compareFn(c1: any, c2: any): boolean {
