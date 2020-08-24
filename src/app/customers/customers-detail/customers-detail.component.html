@@ -4,33 +4,33 @@
             <h3>{{ 'datos.usuario' | translate }}</h3>
             <mat-form-field>
                 <mat-label>{{ 'nombre' | translate }}</mat-label>
-                <input matInput placeholder="{{ 'nombre' | translate }}" formControlName="name">
+                <input matInput placeholder="{{ 'nombre' | translate }}" formControlName="name" id="name">
             </mat-form-field>
             <mat-form-field>
                 <mat-label>{{ 'apellido' | translate }}</mat-label>
-                <input matInput placeholder="{{ 'apellido' | translate }}" formControlName="lastname">
+                <input matInput placeholder="{{ 'apellido' | translate }}" formControlName="lastname" id="lastname">
             </mat-form-field>
             <mat-form-field>
                 <mat-label>{{ 'usuario' | translate }} *</mat-label>
-                <input matInput placeholder="{{ 'usuario' | translate }}" formControlName="user">
+                <input matInput placeholder="{{ 'usuario' | translate }}" formControlName="user" id="user">
             </mat-form-field>
             <mat-form-field>   
                 <mat-label>{{ 'nacimiento' | translate }}</mat-label>
-                <input matInput [matDatepicker]="picker" [formControl]="birth">
+                <input matInput [matDatepicker]="picker" [formControl]="birth" id="birth">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
             <mat-form-field>
                 <mat-label>{{ 'email' | translate }} *</mat-label>
-                <input matInput placeholder="{{ 'email' | translate }}" formControlName="email">
+                <input matInput placeholder="{{ 'email' | translate }}" formControlName="email" id="email">
             </mat-form-field>
             <mat-form-field>
                 <mat-label>{{ 'telefono' | translate }}</mat-label>
-                <input matInput placeholder="{{ 'telefono' | translate }}" formControlName="telephone">
+                <input matInput placeholder="{{ 'telefono' | translate }}" formControlName="telephone" id="telephone">
             </mat-form-field>
             <mat-form-field>
                 <mat-label>{{ 'genero' | translate }} *</mat-label>
-                <mat-select formControlName="gender" [compareWith]="compareFn">
+                <mat-select formControlName="gender" [compareWith]="compareFn"  id="gender">
                   <mat-option *ngFor="let gender of genders" [value] = "gender">
                     {{gender.nombre}}
                   </mat-option>
@@ -40,27 +40,27 @@
             <h3>{{ 'direccion.usuario' | translate }}</h3>
             <mat-form-field>
                 <mat-label>{{ 'destinatario' | translate }}</mat-label>
-                <input matInput placeholder="{{ 'destinatario' | translate }}" formControlName="addressee">
+                <input matInput placeholder="{{ 'destinatario' | translate }}" formControlName="addressee" id="addressee">
             </mat-form-field>
             <mat-form-field>
                 <mat-label>{{ 'calle' | translate }}</mat-label>
-                <input matInput placeholder="{{ 'calle' | translate }}" formControlName="street">
+                <input matInput placeholder="{{ 'calle' | translate }}" formControlName="street" id="street">
             </mat-form-field>
             <mat-form-field>
                 <mat-label>{{ 'piso' | translate }}</mat-label>
-                <input matInput placeholder="{{ 'piso' | translate }}" formControlName="flat">
+                <input matInput placeholder="{{ 'piso' | translate }}" formControlName="flat" id="flat">
             </mat-form-field>
             <mat-form-field>
                 <mat-label>{{ 'codigo.postal' | translate }}</mat-label>
-                <input matInput placeholder="{{ 'codigo.postal' | translate }}" formControlName="postalCode">
+                <input matInput placeholder="{{ 'codigo.postal' | translate }}" formControlName="postalCode" id="postalCode">
             </mat-form-field>
             <mat-form-field>
                 <mat-label>{{ 'localidad' | translate }}</mat-label>
-                <input matInput placeholder="{{ 'localidad' | translate }}" formControlName="locality">
+                <input matInput placeholder="{{ 'localidad' | translate }}" formControlName="locality" id="locality">
             </mat-form-field>
             <mat-form-field>
                 <mat-label>{{ 'datos.adicionales' | translate }}</mat-label>
-                <input matInput placeholder="{{ 'datos.adicionales' | translate }}" formControlName="additionalData">
+                <input matInput placeholder="{{ 'datos.adicionales' | translate }}" formControlName="additionalData" id="additionalData">
             </mat-form-field>
 
             <div class="button-row">

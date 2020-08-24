@@ -24,6 +24,11 @@ import { DirectivesModule } from '../directives/directive.module';
 import {MatSliderModule} from '@angular/material/slider';
 import {MatIconModule} from '@angular/material/icon';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {MatDividerModule} from '@angular/material/divider';
+import {MatGridListModule} from '@angular/material/grid-list';
+import { PreCreateProductComponent } from './pre-create-product/pre-create-product.component';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 const routes: Routes = [
   {
@@ -32,12 +37,16 @@ const routes: Routes = [
   },{
     path: 'detail/:id',
     component: ProductsDetailComponent,
-  },
+  },{
+    path: 'new',
+    component: PreCreateProductComponent,
+  }
 ];
 @NgModule({
   declarations: [
     ProductsListComponent,
-    ProductsDetailComponent
+    ProductsDetailComponent,
+    PreCreateProductComponent
   ],
   imports: [
     CommonModule,
@@ -63,6 +72,10 @@ const routes: Routes = [
     MatSliderModule,
     MatIconModule,
     MatExpansionModule,
+    MatDividerModule,
+    MatGridListModule,
+    MatChipsModule,
+    MatAutocompleteModule,
     RouterModule.forChild(routes)
   ],
   exports: [

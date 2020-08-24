@@ -12,10 +12,14 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialog } from 'src/app/dialogs/confirm-dialog';
 import { ProductBasic, PageModelProductBasic } from 'src/app/models/producto';
+import { startWith, map } from 'rxjs/operators';
+import { FormControl, FormGroup } from '@angular/forms';
 
 const PRODUCT_DETAIL_PATH = '/products/detail';
+const PRODUCT_NEW_PATH = '/products/new';
 const NEXT_PAGE = 'next';
 const PREVIOUS_PAGE = 'prev';
+const PRE_CREATE = 'preCreate';
 
 @Component({
   selector: 'app-products-list',
@@ -35,6 +39,8 @@ export class ProductsListComponent implements OnInit {
   private urlProducts: string;
   private urlProductsPrev: string;
   private urlProductsNext: string;
+  private urlPreCreate: string;
+  public searchBoxForm: FormGroup;
   displayedColumns: string[] = ['foto', 'nombre', 'tamano', 'precio', 'acciones'];
   dataSource = new MatTableDataSource<ProductBasic>();
 
@@ -55,6 +61,7 @@ export class ProductsListComponent implements OnInit {
     this.urlProducts = this.getUrlProducts();
     this.setPaginator();
     this.getProductsBasicList(this.urlProducts);
+    this.initSearchBoxForm();
   }
 
   getUrlProducts(){
@@ -64,7 +71,7 @@ export class ProductsListComponent implements OnInit {
   }
 
   getProductsBasicList(urlProductsPageable: string){
-    this.productService.getProductsBasicList(urlProductsPageable).subscribe( data =>{
+    this.productService.getProductsBasicList(urlProductsPageable, null).subscribe( data =>{
       this.pageModelProductBasic = data;
       this.setTableDataSource();
       this.setTableTotalLength();
@@ -93,12 +100,15 @@ export class ProductsListComponent implements OnInit {
         this.urlProductsNext = link.href;
       }else if(linkedUrl == PREVIOUS_PAGE){
         this.urlProductsPrev = link.href;
+      }else if(linkedUrl == PRE_CREATE){
+        this.urlPreCreate = link.href;
       }
     }
   }
 
   saveDataInSessionStorage(){
     window.sessionStorage.setItem("productListData", JSON.stringify(this.productsBasicList));
+    window.sessionStorage.setItem("preCreateUrl", this.urlPreCreate);
   }
 
   busquedaOrden(event) {
@@ -119,6 +129,23 @@ export class ProductsListComponent implements OnInit {
     }
   }
 
+  initSearchBoxForm(){
+    this.searchBoxForm = new FormGroup({
+      textToSearch: new FormControl('')
+    })
+  }
+
+  filterSearchBoxText(){
+    let textToSearch: string = this.searchBoxForm.get('textToSearch').value;
+    this.productService.getProductsBasicList(this.urlProducts, textToSearch).subscribe( data =>{
+      this.pageModelProductBasic = data;
+      this.setTableDataSource();
+      this.setTableTotalLength();
+      this.setUrlPrevAndNext();
+      this.saveDataInSessionStorage();
+    })
+  }
+
   openDialog(product: ProductBasic): void {
 
     const dialogRef = this.dialog.open(ConfirmDialog, {
@@ -132,6 +159,10 @@ export class ProductsListComponent implements OnInit {
 
   goToProductDetail(product: ProductBasic){
     this.router.navigate([PRODUCT_DETAIL_PATH, product.id])
+  }
+
+  createNewProduct(){
+    this.router.navigate([PRODUCT_NEW_PATH])
   }
 
   setLanguageSelected(){

@@ -77,5 +77,17 @@
     "beneficiosEng":"English Benefits",
     "fotos.producto":"Product photos",
     "subir.foto":"Upload photo",
-    "eliminar.foto":"Delete photo"
+    "eliminar.foto":"Delete photo",
+    "info.vitaminas":"Vitamins information",
+    "valor":"Value",
+    "agregar":"Add",
+    "crear.producto":"Creat Product",
+    "directorio.principal":"Main directory",
+    "directorio.imagenes":"Images directory",
+    "continuar":"Continue",
+    "informacion.imagenes":"Images information about the new product",
+    "nombre.producto":"New product name",
+    "sabores.producto":"Product flavours",
+    "sabores":"Flavours",
+    "filtrar.nombre":"Filter by name"
 }

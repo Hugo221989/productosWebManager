@@ -94,7 +94,7 @@ export class CustomersDetailComponent implements OnInit {
 
   getCustomerBasicData(){
     if(this.customerUrlApi == null){
-      this.router.navigate(['products/list'])
+      this.router.navigate(['customers/list'])
     }else{
       this.custumerService.getCustomerBasic(this.customerUrlApi).subscribe( data =>{
         this.customer = data;

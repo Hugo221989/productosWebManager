@@ -27,3 +27,15 @@ h3{
     background: rgb(253 253 253);
     color: black;
 }
+
+.titleContainer{
+    margin-bottom: 2%;
+}
+
+.title{
+    text-align: center;
+}
+
+:host ::ng-deep .mat-form-field{
+    margin-right: 5%;
+}

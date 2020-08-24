@@ -1,8 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ProductsListComponent } from './products-list.component';
+import { PreCreateProductComponent } from './pre-create-product.component';
 import { HttpClientModule } from '@angular/common/http';
-import { StateObservable, ActionsSubject } from '@ngrx/store';
 import { ProductsModule } from '../products.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -11,14 +9,10 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { SettingsState } from 'src/app/settings/settings.models';
 import * as fromSelectors from '../../settings/settings.selectors';
 import { MemoizedSelector } from '@ngrx/store';
-import { Component } from '@angular/core';
 
-@Component({ selector: 'test-blank', template: `` })
-class BlankComponent {}
-
-describe('ProductsListComponent', () => {
-  let component: ProductsListComponent;
-  let fixture: ComponentFixture<ProductsListComponent>;
+describe('PreCreateProductComponent', () => {
+  let component: PreCreateProductComponent;
+  let fixture: ComponentFixture<PreCreateProductComponent>;
   let store: MockStore;
   const initialState = { currentLanguage: 'es' };
   let mockUsernameSelector: MemoizedSelector<SettingsState, string>;
@@ -28,13 +22,12 @@ describe('ProductsListComponent', () => {
       imports: [HttpClientModule,
         HttpClientTestingModule,
         RouterTestingModule.withRoutes([
-          { path: 'products/list', component: BlankComponent },
+          { path: 'products/new', component: PreCreateProductComponent },
         ]),
         ProductsModule,
         BrowserAnimationsModule],
-      declarations: [ ProductsListComponent ],
-      providers: [ 
-        StateObservable, ActionsSubject,
+      declarations: [ PreCreateProductComponent ],
+      providers: [
         provideMockStore({ initialState })
       ]
     })
@@ -43,7 +36,7 @@ describe('ProductsListComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProductsListComponent);
+    fixture = TestBed.createComponent(PreCreateProductComponent);
     component = fixture.componentInstance;
     mockUsernameSelector = store.overrideSelector(
       fromSelectors.selectSettingsCurrentLanguage,

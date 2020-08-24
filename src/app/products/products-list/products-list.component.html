@@ -1,6 +1,30 @@
 <div>
     <div class="divTitulo">
-        <h1 class="h1Titulo">{{ 'productos' | translate }}</h1>
+        <div class="button-row containerTitle">
+          <div class="divButtonCrear">
+            <button mat-flat-button color="primary" (click)="createNewProduct()"><mat-icon aria-hidden="false" aria-label="Example home icon">add</mat-icon> {{ 'crear.producto' | translate }}</button>
+          </div>
+          <div class="divTitle">
+            <h1 class="h1Titulo">{{ 'productos' | translate }}</h1>
+          </div>
+        </div>
+
+        <div class="button-row containerTitle">
+          <div class="containerSearchBox">
+            <div>
+              <form [formGroup]="searchBoxForm">
+                  <mat-form-field class="divSearchBox">
+                      <mat-label>{{ 'filtrar.nombre' | translate }} *</mat-label>
+                      <input matInput placeholder="{{ 'filtrar.nombre' | translate }}" formControlName="textToSearch">
+                  </mat-form-field>
+              </form>
+            </div>
+            <div class="divButtonSearch">
+              <button mat-flat-button color="primary" (click)="filterSearchBoxText()"><mat-icon aria-hidden="false" aria-label="Example home icon">search</mat-icon></button>
+            </div>
+          </div>
+        </div>
+        
     </div>
 
     <div class="mat-elevation-z8">

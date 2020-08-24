@@ -1,6 +1,6 @@
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators, FormArray } from '@angular/forms';
 import { Product, Producto } from 'src/app/models/producto';
-import { ValorNutricional, InfoBasica, Descripcion } from 'src/app/models/productoOtrosDatos';
+import { ValorNutricional, InfoBasica, Descripcion, InfoVitaminas, Sabor } from 'src/app/models/productoOtrosDatos';
 
 export default class Utils {
     public productForm: FormGroup;
@@ -76,14 +76,17 @@ export default class Utils {
       }
     
       static initInfoVitaminasForm(fb: FormBuilder){
+        //let infoVitaminasForm = new FormArray([]);
         let infoVitaminasForm:FormGroup = fb.group({
-          'nombre': new FormControl(''),
-          'nombreEng': new FormControl(''),
-          'valor': new FormControl('')
+          vitas: fb.array([
+            /* fb.group({
+                nombre: new FormControl('', Validators.required),
+                valor: new FormControl('', Validators.required)
+            }) */
+          ])
         })
         return infoVitaminasForm; 
       }
-
 
       static fillProductFormData(productForm: FormGroup, product: Product){
         let producto = product.producto;
@@ -185,6 +188,23 @@ export default class Utils {
         return producto;
       }
 
+      static updateProductoInfoVitaminas(producto:Producto, infoVitaminasForm:FormGroup){
+          let infoVitaminasArray: InfoVitaminas[] = [];
+          let vitaminasFields = this.getInfoVitaminasFormArray(infoVitaminasForm).controls;
+          for(let vitaminasField of vitaminasFields){
+            let infoVitaminas: InfoVitaminas = {
+                nombre: vitaminasField.get('nombre').value,
+                valor: vitaminasField.get('valor').value
+            }
+            infoVitaminasArray.push(infoVitaminas);
+          }
+          producto.valorNutricional.infoVitaminas = infoVitaminasArray;
+          return producto;
+      }
+      static getInfoVitaminasFormArray(infoVitaminasForm:FormGroup): FormArray {
+        return infoVitaminasForm.get('vitas') as FormArray;
+      }
+
       static updateProductoDescripcion(producto:Producto, descripcionForm:FormGroup){
         let descripcion: Descripcion = producto.descripcion;
         descripcion.titulo = descripcionForm.value.titulo;
@@ -198,6 +218,11 @@ export default class Utils {
         descripcion.beneficios = descripcionForm.value.beneficios;
         descripcion.beneficiosEng = descripcionForm.value.beneficiosEng;
         producto.descripcion = descripcion;
+        return producto;
+      }
+
+      static updateProductoFlavours(producto:Producto, flavours:Sabor[]){
+        producto.sabores = flavours;
         return producto;
       }
 
@@ -229,5 +254,18 @@ export default class Utils {
         const day = dateArray[0];
         return new Date(year+'-'+month+'-'+day);
       }
+
+
+      static initPreProductForm(fb: FormBuilder) { 
+        let preProductForm: FormGroup = fb.group({
+            'nombre': new FormControl('', Validators.required),
+            'mainDirectory': new FormControl('', Validators.required),
+            'imagesDirectory': new FormControl('', Validators.required),
+            'categoriaPadre': new FormControl('', Validators.required),
+            'categoria': new FormControl('', Validators.required),
+            'subCategoria': new FormControl('', Validators.required),
+          });
+        return preProductForm; 
+    }
 
 }

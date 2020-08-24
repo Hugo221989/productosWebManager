@@ -18,7 +18,7 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { SettingsEffect } from './settings/settings.effects';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ProductsModule } from './products/products.module';
 
 @NgModule({
@@ -50,6 +50,7 @@ import { ProductsModule } from './products/products.module';
     I18nModule
   ],
   providers: [
+    TranslateService
   ],
   bootstrap: [AppComponent]
 })

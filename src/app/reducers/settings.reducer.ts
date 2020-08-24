@@ -4,7 +4,7 @@ import { SettingsState } from '../settings/settings.models';
 
 
 export const initialState: SettingsState = {
-    currentLanguage: null
+    currentLanguage: 'es'
 }
 
 const reducer = createReducer( 

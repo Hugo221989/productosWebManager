@@ -43,6 +43,7 @@ export class Producto {
     valorNutricional: ValorNutricional;
     descripcion: Descripcion;
     precioFinal: string;
+    carpetaFoto: string;
     categoriaPadre: CategoriaPadre;
     categoria: Categoria;
     subCategoria: SubCategoria;

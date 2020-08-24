@@ -21,7 +21,7 @@ export class Descripcion{
 }
 
 export class InfoVitaminas{
-    id: number;
+    id?: number;
     nombre?: string;
     nombreEng?: string;
     valor?: string;

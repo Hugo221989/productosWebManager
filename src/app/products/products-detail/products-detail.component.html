@@ -1,4 +1,9 @@
 <div>
+
+    <mat-card class="titleContainer">
+        <h2 class="title">{{ productoName }}</h2>
+    </mat-card>
+
     <mat-accordion>
     <mat-expansion-panel >
         <mat-expansion-panel-header>
@@ -18,7 +23,7 @@
                 </mat-form-field>
                 <mat-form-field>
                     <mat-label>{{ 'precio' | translate }} *</mat-label>
-                    <input matInput placeholder="{{ 'precio' | translate }}" formControlName="precio" class="input-compose"
+                    <input matInput placeholder="{{ 'precio' | translate }}" formControlName="precio" class="input-compose" id="precio"
                     numeric decimals="2" type="text"><span matSuffix> €</span> 
                 </mat-form-field>
                 <mat-form-field>
@@ -232,6 +237,57 @@
         </mat-card>
     </mat-expansion-panel>
 
+    <!--INFO VITAMINAS-->
+    <mat-expansion-panel >
+        <mat-expansion-panel-header>
+        <mat-panel-title>
+            <h3>{{ 'info.vitaminas' | translate }}</h3>
+        </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-card>
+            <!-- <div *ngIf="infoVitaminasForm.controls.vitaminas.value">
+                <mat-grid-list cols="2" rowHeight="5em">
+                    <mat-grid-tile formArrayName="vitaminas" *ngFor="let vitamina of infoVitaminasForm.controls.vitaminas?.value; let i = index">
+
+                    </mat-grid-tile>
+                </mat-grid-list>
+            </div>
+            <div class="button-row">
+                <button  mat-flat-button class="buttonAdd" color="primary" (click)="addVitaminaToForm()">{{ 'agregar' | translate }}</button>
+                <button mat-flat-button class="buttonCancel" routerLink="/products/list">{{ 'cancelar' | translate }}</button>
+                <button mat-flat-button color="primary" (click)="updateProductMainData()">{{ 'guardar' | translate }}</button>
+            </div> -->
+            <form [formGroup]="infoVitaminasForm">
+                <div>
+                    <mat-grid-list cols="2" rowHeight="5em">
+                        <mat-grid-tile formArrayName="vitas" *ngFor="let vitamina of getInfoVitaminasFormArray().controls; let i = index">
+                            <div class="containerDivVitamins"  [formGroup]="getInfoVitaminasFormArray().controls[i]">
+                                <ng-container *ngIf="getInfoVitaminasFormArray().value">
+                                    <mat-form-field>
+                                        <mat-label>{{ 'nombre' | translate }} *</mat-label>
+                                        <input matInput placeholder="{{ 'nombre' | translate }}"  formControlName = "nombre">
+                                    </mat-form-field>
+                                    <mat-form-field>
+                                        <mat-label>{{ 'valor' | translate }} *</mat-label>
+                                        <input matInput placeholder="{{ 'valor' | translate }}"  formControlName = "valor">
+                                    </mat-form-field>
+                                    <div class="iconTableActions">
+                                        <a class="actionIcon" (click)="removeVitamin(i)"><i class="material-icons iconoHover md-36">delete</i></a>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </mat-grid-tile>
+                </mat-grid-list>
+                </div>
+                <div class="button-row">
+                    <button  mat-flat-button class="buttonAdd" color="primary" (click)="addVitaminaToForm()">{{ 'agregar' | translate }}</button>
+                    <button mat-flat-button class="buttonCancel" routerLink="/products/list">{{ 'cancelar' | translate }}</button>
+                    <button mat-flat-button color="primary" (click)="updateProductInfoVitaminas()"  [disabled]="!infoVitaminasForm.valid">{{ 'guardar' | translate }}</button>
+                </div>
+            </form>
+        </mat-card>
+    </mat-expansion-panel>
+
     <!--DESCRIPCION-->
     <mat-expansion-panel >
         <mat-expansion-panel-header>
@@ -296,6 +352,33 @@
         </mat-card>
     </mat-expansion-panel>
 
+    <mat-expansion-panel >
+        <mat-expansion-panel-header>
+        <mat-panel-title>
+            <h3>{{ 'sabores.producto' | translate }}</h3>
+        </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-card>
+                    <div class="containerFlavoursSection">
+                        <div class="divSelectFlavours">
+                            <mat-select placeholder="{{ 'sabores' | translate }}" [(value)]="selectedFlavours" multiple [compareWith]="compareFn">
+                            <mat-option *ngFor="let flavour of flavours" [value]="flavour">{{flavour.sabor}}</mat-option>
+                            </mat-select>
+                        </div>
+                        <div class="divChipsFlavours">
+                            <mat-chip-list aria-label="Fish selection">
+                                <mat-chip color="accent" selected *ngFor="let selectedFlavour of selectedFlavours"> {{selectedFlavour?.sabor}} </mat-chip>
+                            </mat-chip-list>
+                        </div>
+                    </div>
+                <div class="button-row">
+                    <button mat-flat-button class="buttonCancel" routerLink="/products/list">{{ 'cancelar' | translate }}</button>
+                    <button mat-flat-button color="primary" (click)="updateProductoFlavours()" >{{ 'guardar' | translate }}</button>
+                </div>
+        </mat-card>
+    </mat-expansion-panel>
+
+
         <!--FOTOS-->
         <mat-expansion-panel >
             <mat-expansion-panel-header>
@@ -326,7 +409,7 @@
                             <div class="divUploadButtons">
                                 <div class="control">
                                     <button mat-flat-button class="buttonCancel" (click)="cancelPhotoOneChange()">{{ 'cancelar' | translate }}</button>
-                                    <button  mat-flat-button color="primary" (click)="onPhotoUploadOne(productPhotoOne.ruta)" [disabled]="isUploading ? '' : null" >{{ 'subir.foto' | translate }}</button>
+                                    <button  mat-flat-button color="primary" (click)="onPhotoUploadOne(productPhotoOne.ruta)" [disabled]="photoOne == null" >{{ 'subir.foto' | translate }}</button>
                                 </div>
                             </div>
                             </div>
@@ -348,7 +431,7 @@
                             <div class="divUploadButtons">
                                 <div class="control">
                                     <button mat-flat-button class="buttonCancel" (click)="cancelPhotoTwoChange()">{{ 'cancelar' | translate }}</button>
-                                    <button  mat-flat-button color="primary" (click)="onPhotoUploadTwo(productPhotoTwo.ruta)" [disabled]="isUploading ? '' : null" >{{ 'subir.foto' | translate }}</button>
+                                    <button  mat-flat-button color="primary" (click)="onPhotoUploadTwo(productPhotoTwo.ruta)" [disabled]="photoTwo == null" >{{ 'subir.foto' | translate }}</button>
                                 </div>
                             </div>
                             </div>
@@ -370,7 +453,7 @@
                             <div class="divUploadButtons">
                                 <div class="control">
                                     <button mat-flat-button class="buttonCancel" (click)="cancelPhotoThreeChange()">{{ 'cancelar' | translate }}</button>
-                                    <button  mat-flat-button color="primary" (click)="onPhotoUploadThree(productPhotoThree.ruta)" [disabled]="isUploading ? '' : null" >{{ 'subir.foto' | translate }}</button>
+                                    <button  mat-flat-button color="primary" (click)="onPhotoUploadThree(productPhotoThree.ruta)" [disabled]="photoThree == null" >{{ 'subir.foto' | translate }}</button>
                                 </div>
                             </div>
                             </div>
@@ -392,7 +475,7 @@
                             <div class="divUploadButtons">
                                 <div class="control">
                                     <button mat-flat-button class="buttonCancel" (click)="cancelPhotoFourChange()">{{ 'cancelar' | translate }}</button>
-                                    <button  mat-flat-button color="primary" (click)="onPhotoUploadFour(productPhotoFour.ruta)" [disabled]="isUploading ? '' : null" >{{ 'subir.foto' | translate }}</button>
+                                    <button  mat-flat-button color="primary" (click)="onPhotoUploadFour(productPhotoFour.ruta)" [disabled]="photoFour == null" >{{ 'subir.foto' | translate }}</button>
                                 </div>
                             </div>
                             </div>

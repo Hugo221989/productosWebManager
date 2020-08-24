@@ -1,3 +1,11 @@
+.titleContainer{
+    margin-bottom: 2%;
+}
+
+.title{
+    text-align: center;
+}
+
 :host ::ng-deep .mat-form-field{
     margin-right: 5%;
 }
@@ -9,6 +17,10 @@
 .buttonCancel{
     margin-right: 1%;
     background: gray;
+}
+
+.buttonAdd{
+    margin-right: 1%;
 }
 
 .divRadioGroup{
@@ -69,6 +81,36 @@
     margin-top: 5%;
 }
 
+.containerDivVitamins{
+    display: inline-flex;
+}
+
+.iconTableActions{
+    width: 50%;
+    transform: translate(50%, 35%);
+}
+
+.actionIcon{
+    color: white;
+    cursor: pointer;
+}
+
 .selectFileInput{
     width: 47%;
+}
+
+.containerFlavoursSection{
+    display: inline-flex;
+    width: 100%;
+}
+
+.divSelectFlavours{
+    width: 25%;
+    background: #7b1fa2;
+    padding: 1%;
+}
+
+.divChipsFlavours{
+    width: 60%;
+    margin-left: 5%;
 }

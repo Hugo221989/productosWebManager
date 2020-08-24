@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators, FormArray } from '@angular/forms';
 import { Product, ProductBasic, Producto } from 'src/app/models/producto';
 import { TranslateService } from '@ngx-translate/core';
 import { SettingsState } from 'src/app/settings/settings.models';
@@ -10,13 +10,16 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { selectSettingsCurrentLanguage } from 'src/app/settings/settings.selectors';
 import { ProductsService } from '../service/products.service';
 import { CategoriaPadreDto, SubCategoriaDto, CategoriaDto } from 'src/app/models/categoria';
-import { InfoBasica, Descripcion, ValorNutricional, Foto } from 'src/app/models/productoOtrosDatos';
+import { InfoBasica, Descripcion, ValorNutricional, Foto, InfoVitaminas, Sabor } from 'src/app/models/productoOtrosDatos';
 import { UploadService } from '../service/upload-service.service';
 import Utils from '../helpers/product-detail-helper';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialog } from 'src/app/dialogs/confirm-dialog';
 
 const DELETE: string = 'delete';
 const UPDATE: string = 'update';
-const CATEGORIASPADRE: string = 'categoriasPadre';
+const CATEGORIASPADRE: string = 'categoriasPadreUrl';
+const FLAVOURS: string = 'flavoursUrl';
 const CATEGORIAS: string = 'categorias';
 const SUBCATEGORIAS: string = 'subCategorias';
 const URL_UPLOAD_PHOTO: string = 'uploadPhotoUrl';
@@ -38,7 +41,9 @@ export class ProductsDetailComponent implements OnInit {
   private product: Product;
   private producto: Producto;
   private productId: string;
+  public productoName: string;
   public birth = new FormControl(new Date());
+  public vitaminas: InfoVitaminas[] = [];
   private productUrlApi: string;
   private updateProductoUrl: string;
   private deleteProductoUrl: string;
@@ -46,9 +51,12 @@ export class ProductsDetailComponent implements OnInit {
   private categoriaUrl: string;
   private subCategoriaUrl: string;
   private urlUploadPhotos: string;
+  private urlFlavours: string;
   public categoriasPadre: CategoriaPadreDto[] = [];
   public categorias: CategoriaDto[] = [];
   public subCategorias: SubCategoriaDto[] = [];
+  public flavours: Sabor[] = [];
+  public selectedFlavours:Sabor[] = [];
   public inputPuntuacion: number = 0;
 
   public progress: number;
@@ -68,13 +76,15 @@ export class ProductsDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private uploader: UploadService,
-    private _snackBar: MatSnackBar) { }
+    private _snackBar: MatSnackBar,
+    public dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.setLanguageSelected();
     this.initProductForm();
     this.initValorNutricionalForm();
     this.initInfoBasicaForm();
+    this.initInfoVitaminasForm();
     this.initDescripcionForm();
     this.getUrlParams();
     this.getProductBasicData();
@@ -99,18 +109,24 @@ export class ProductsDetailComponent implements OnInit {
 
   initInfoVitaminasForm(){
     this.infoVitaminasForm = Utils.initInfoVitaminasForm(this.fb);
+    //this. addVitaminaToForm();
   }
+  
 
   getUrlParams(){
     this.productId = this.route.snapshot.paramMap.get("id");
-    this.getCurrentUserData();
+    this.getProductUserData();
   }
 
-  getCurrentUserData(){
+  getProductUserData(){
     let products = this.getProductsDataFromSession();
       for(let product of products){
         if(product != null && product.id == this.stringToNumber(this.productId)){
           this.productUrlApi = product.links[0].href;
+        }else{
+          if(window.sessionStorage.getItem("newProductUrl")){
+            this.productUrlApi = window.sessionStorage.getItem("newProductUrl");
+          }
         }
       }
   }
@@ -134,8 +150,10 @@ export class ProductsDetailComponent implements OnInit {
       this.productService.getProductBasic(this.productUrlApi).subscribe( data =>{
         this.product = data;
         this.fillProductLinkedUrls();
+        this.fillFlavoursList();
         this.getCategoriasPadreList();
         this.fillProductFormData();
+        this.fillProductFlavours();
         this.fillProductPhotos();
       })
     }
@@ -144,6 +162,7 @@ export class ProductsDetailComponent implements OnInit {
   fillProductFormData(){
     if(this.product){
       this.producto = this.product.producto;
+      this.productoName = this.producto.nombre;
       this.productForm = Utils.fillProductFormData(this.productForm, this.product);
       this.inputPuntuacion = this.producto.puntuacion;
       this.fillValorNutricionalForm(this.producto);
@@ -156,6 +175,7 @@ export class ProductsDetailComponent implements OnInit {
       let valorNutricional: ValorNutricional = producto.valorNutricional;
       this.valorNutricionalForm = Utils.fillValorNutricionalForm(this.valorNutricionalForm, valorNutricional);
       this.fillInfoBasicaForm(valorNutricional);
+      this.fillInfoVitaminas(valorNutricional);
     }
   }
 
@@ -166,11 +186,48 @@ export class ProductsDetailComponent implements OnInit {
     }
   }
 
+  fillInfoVitaminas(valorNutricional: ValorNutricional){
+    if(valorNutricional.infoVitaminas){
+      let infoVitaminas = valorNutricional.infoVitaminas;
+      this.vitaminas = infoVitaminas;
+      let index:number = 0;
+      for(let vitamina of this.vitaminas){ 
+        this.addVitaminaToForm();
+        this.fillVitaminaForm(vitamina, index);
+        index ++;
+      }
+    }
+  }
+
+  getInfoVitaminasFormArray(): FormArray {
+    return this.infoVitaminasForm.get('vitas') as FormArray;
+  }
+
+  addVitaminaToForm(){
+    this.getInfoVitaminasFormArray().push(this.fb.group({
+        nombre: new FormControl('', Validators.required),
+        valor: new FormControl('', Validators.required)
+    }));
+  }
+
+  fillVitaminaForm(vitamina: InfoVitaminas, index: number){
+    this.getInfoVitaminasFormArray().controls[index].get('nombre').setValue(vitamina.nombre);
+    this.getInfoVitaminasFormArray().controls[index].get('valor').setValue(vitamina.valor);
+  }
+
+  removeVitamin(index: number){
+    this.getInfoVitaminasFormArray().controls.splice(index, 1);
+  }
+
   fillDescripcionForm(producto: Producto){
     if(producto.descripcion){
       let descripcion: Descripcion = producto.descripcion;
       this.descripcionForm = Utils.fillDescripcionForm(this.descripcionForm, descripcion);
     }
+  }
+
+  fillProductFlavours(){
+    this.selectedFlavours = this.product.producto.sabores;
   }
 
   fillProductPhotos(){
@@ -196,6 +253,8 @@ export class ProductsDetailComponent implements OnInit {
         this.categoriaPadreUrl = link.href;
       }else if(linkedUrl == URL_UPLOAD_PHOTO){
         this.urlUploadPhotos = link.href;
+      }else if(linkedUrl == FLAVOURS){
+        this.urlFlavours = link.href;
       }
     }
   }
@@ -206,14 +265,22 @@ export class ProductsDetailComponent implements OnInit {
   }
 
   updateProductoInfoBasica(){
-    this.producto = Utils.updateProductoInfoBasica(this.producto, this.infoBasicaForm);
-    this.product.producto = this.producto;
+    this.product.producto = Utils.updateProductoInfoBasica(this.product.producto, this.infoBasicaForm);
+    this.updateProducto();
+  }
+
+  updateProductInfoVitaminas(){
+    this.product.producto= Utils.updateProductoInfoVitaminas(this.product.producto, this.infoVitaminasForm);
     this.updateProducto();
   }
 
   updateProductoDescripcion(){
-    this.producto = Utils.updateProductoDescripcion(this.producto, this.descripcionForm);
-    this.product.producto = this.producto;
+    this.product.producto = Utils.updateProductoDescripcion(this.product.producto, this.descripcionForm);
+    this.updateProducto();
+  }
+
+  updateProductoFlavours(){
+    this.product.producto = Utils.updateProductoFlavours(this.product.producto, this.selectedFlavours);
     this.updateProducto();
   }
 
@@ -234,6 +301,17 @@ export class ProductsDetailComponent implements OnInit {
     this._snackBar.open(message, action, {
       duration: 4000,
       panelClass: ['snackBarStyle']
+    });
+  }
+
+  openDialog(nombre: string): void {
+
+    const dialogRef = this.dialog.open(ConfirmDialog, {
+      //width: '250px',
+      data: {name: nombre}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
     });
   }
 
@@ -340,6 +418,7 @@ export class ProductsDetailComponent implements OnInit {
       this.infoMessage = message;
       this.openMessageAfterUpdate('Foto subida correctamente', '');
     },error => {
+      this.isUploading = false;
       this.openMessageAfterUpdate('Error al guardar los datos', error.error);
     });
   }
@@ -354,6 +433,8 @@ export class ProductsDetailComponent implements OnInit {
   fillCategoriaLinkedUrl(productCategoriaPadreId){
     for(let categoriaPadre of this.categoriasPadre){
       if(categoriaPadre.id == productCategoriaPadreId){
+        this.categorias = null;
+        this.subCategorias = null;
         this.setCategoriaUrl(categoriaPadre);
       }
     }
@@ -397,6 +478,12 @@ export class ProductsDetailComponent implements OnInit {
   getSubCategoriasList(){
     this.productService.getSubCategorias(this.subCategoriaUrl).subscribe(data => {
       this.subCategorias = data;
+    })
+  }
+
+  fillFlavoursList(){
+    this.productService.getFlavours(this.urlFlavours).subscribe(data => {
+      this.flavours = data;
     })
   }
 

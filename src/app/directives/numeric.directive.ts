@@ -10,10 +10,10 @@ export class NumericDirective {
 
     private check(value: string, decimals: number)
     {
-      if (decimals <= 0) {
+      if (decimals <= 0) {console.log('IF');
         return String(value).match(new RegExp(/^\d+$/));
       } else {
-          var regExpString = "^\\s*((\\d+(\\.\\d{0," + decimals + "})?)|((\\d*(\\.\\d{1," + decimals + "}))))\\s*$"
+          var regExpString = "^\\s*((\\d+(\\.\\d{0," + decimals + "})?)|((\\d*(\\.\\d{1," + decimals + "}))))\\s*$";
           return String(value).match(new RegExp(regExpString));
       }
     }

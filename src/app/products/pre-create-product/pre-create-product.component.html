@@ -1,0 +1,62 @@
+<div>
+
+    <mat-card class="titleContainer">
+        <h2 class="title">{{ 'crear.producto' | translate }}</h2>
+    </mat-card>
+
+    <mat-card>
+        <form [formGroup]="preCreateForm">
+            <h3>{{ 'nombre.producto' | translate }}</h3>
+            <mat-form-field>
+                <mat-label>{{ 'nombre' | translate }} *</mat-label>
+                <input matInput placeholder="{{ 'nombre' | translate }}" formControlName="nombre">
+            </mat-form-field>
+            <p></p>
+            <h3>{{ 'informacion.imagenes' | translate }}</h3>
+            <mat-form-field>
+                <mat-label>{{ 'directorio.principal' | translate }} *</mat-label>
+                <mat-select formControlName="mainDirectory" (selectionChange)="setMainPhotoDirectory($event.value)">
+                    <mat-option *ngFor="let catPadre of categoriasPadre" [value] = "catPadre.key">
+                    {{catPadre.key}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>{{ 'directorio.imagenes' | translate }} *</mat-label>
+                <input matInput placeholder="{{ 'directorio.imagenes' | translate }}" formControlName="imagesDirectory">
+            </mat-form-field>
+            <p></p>
+            <h3>{{ 'categorias' | translate }}</h3>
+            <mat-form-field>
+                <mat-label>{{ 'categoria.padre' | translate }} *</mat-label>
+                <mat-select formControlName="categoriaPadre" (selectionChange)="fillCategoriaLinkedUrl($event.value)">
+                    <mat-option *ngFor="let catPadre of categoriasPadre" [value] = "catPadre.id">
+                    {{catPadre.nombre}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>{{ 'categoria' | translate }} *</mat-label>
+                <mat-select formControlName="categoria" (selectionChange)="fillSubCategoriaLinkedUrl($event.value)">
+                    <mat-option *ngFor="let cat of categorias" [value] = "cat.id">
+                    {{cat.nombre}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>{{ 'subcategoria' | translate }} *</mat-label>
+                <mat-select formControlName="subCategoria">
+                    <mat-option *ngFor="let subCat of subCategorias" [value] = "subCat.id">
+                    {{subCat.nombre}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <div class="button-row">
+                <button mat-flat-button class="buttonCancel" routerLink="/products/list">{{ 'cancelar' | translate }}</button>
+                <button mat-flat-button color="primary" (click)="updatePreProductData()"  [disabled]="!preCreateForm.valid">{{ 'continuar' | translate }}</button>
+            </div>
+        </form>
+    </mat-card>
+
+</div>
